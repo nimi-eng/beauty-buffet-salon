@@ -92,7 +92,7 @@ const servicesData = {
                 "Mature microlocs typically form within 9–12 months with proper maintenance.",
             variants: [
                 {
-                    length: "price",
+                    length: "Price",
                     price: "₵850 - 1200",
                     duration: "7-9 hrs"
                 }
