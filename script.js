@@ -14,7 +14,7 @@
    - GSAP animations
    ========================================================= */
 
-const HOME_SERVICE_MULTIPLIER = 1.25;
+const HOME_SERVICE_MULTIPLIER = 1.35;
 const WHATSAPP_NUMBER = "233264174992";
 
 const SALON_LOCATION = "Agbogba, Accra, Ghana";
