@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Beauty Buffet Salon GH — premium hair, nails, makeup and beauty products in Agbogba, Accra, Ghana.">
+    <title>Beauty Buffet Salon GH • Agbogba, Accra</title>
+
+    <link rel="icon" type="image/png" href="img/logo.png">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <!-- NAVBAR -->
+    <nav class="site-nav">
+        <div class="nav-inner">
+            <a href="#home" class="brand">
+                <img src="img/logo.png" alt="Beauty Buffet Salon GH">
+                <span>Beauty Buffet</span>
+            </a>
+
+            <div class="desktop-nav">
+                <a href="#about">About</a>
+                <a href="#services">Services</a>
+                <a href="#home-service">Home Service</a>
+                <a href="#products">Shop</a>
+                <a href="#stylists">Stylists</a>
+                <a href="#gallery">Gallery</a>
+            </div>
+
+            <div class="nav-actions">
+                <button class="nav-shop-btn" onclick="scrollToSection('products')">
+                    <i class="fa-solid fa-bag-shopping"></i>
+                    <span>Shop</span>
+                </button>
+                <button class="primary-btn nav-book-btn" onclick="openBookingModal()">
+                    <i class="fa-regular fa-calendar"></i>
+                    <span>Book Now</span>
+                </button>
+                <button class="mobile-menu-btn" onclick="toggleMobileMenu()" aria-label="Open menu">
+                    <i class="fa-solid fa-bars"></i>
+                </button>
+            </div>
+        </div>
+
+        <div id="mobile-menu" class="mobile-menu">
+            <a href="#about" onclick="closeMobileMenu()">About</a>
+            <a href="#services" onclick="closeMobileMenu()">Services</a>
+            <a href="#home-service" onclick="closeMobileMenu()">Home Service</a>
+            <a href="#products" onclick="closeMobileMenu()">Shop</a>
+            <a href="#stylists" onclick="closeMobileMenu()">Stylists</a>
+            <a href="#gallery" onclick="closeMobileMenu()">Gallery</a>
+            <button class="primary-btn" onclick="closeMobileMenu(); openBookingModal()">Book Appointment</button>
+        </div>
+    </nav>
+
+    <main>
+        <!-- HERO -->
+        <section id="home" class="hero">
+            <div class="hero-media"></div>
+            <div class="hero-shade"></div>
+            <div class="hero-content">
+                <span class="eyebrow hero-eyebrow">Agbogba • Accra, Ghana</span>
+                <h1>Beauty, <em>elevated.</em></h1>
+                <p>
+                    Premium braids, locs, natural hair, makeup, nails and beauty essentials
+                    crafted for the woman who wants to look and feel unforgettable.
+                </p>
+                <div class="hero-actions">
+                    <button class="primary-btn hero-btn" onclick="openBookingModal()">
+                        Book an Appointment <i class="fa-solid fa-arrow-right"></i>
+                    </button>
+                    <a class="ghost-btn hero-btn" href="#services">Explore Services</a>
+                </div>
+                <div class="hero-trust">
+                    <span><i class="fa-solid fa-star"></i> Premium beauty experience</span>
+                    <span><i class="fa-solid fa-location-dot"></i> Agbogba, Accra</span>
+                </div>
+            </div>
+            <div class="hero-scroll">
+                <span>Scroll to explore</span>
+                <i class="fa-solid fa-arrow-down"></i>
+            </div>
+        </section>
+
+        <!-- ABOUT -->
+        <section id="about" class="section about-section">
+            <div class="container about-grid">
+                <div class="about-copy reveal">
+                    <span class="eyebrow">The Beauty Buffet Experience</span>
+                    <h2>Where beauty becomes <em>an experience.</em></h2>
+                    <p>
+                        Welcome to Beauty Buffet Salon GH, located in Agbogba, Accra.
+                        We specialize in beautiful braids, locs, natural hair styles,
+                        hair treatments, makeup and nails.
+                    </p>
+                    <p>
+                        Our experienced stylists combine creativity, precision and quality
+                        products to create a polished result that feels completely yours.
+                    </p>
+                    <div class="about-points">
+                        <span><i class="fa-solid fa-check"></i> Experienced stylists</span>
+                        <span><i class="fa-solid fa-check"></i> Quality beauty products</span>
+                        <span><i class="fa-solid fa-check"></i> Shop & home service options</span>
+                    </div>
+                </div>
+
+                <div class="about-visual reveal">
+                    <img src="img/2022-07-02.jpg" alt="Beauty Buffet Salon">
+                    <div class="about-card">
+                        <span>Beauty Buffet</span>
+                        <strong>Feel beautiful.<br>Leave unforgettable.</strong>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SERVICES -->
+        <section id="services" class="section services-section">
+            <div class="container">
+                <div class="section-heading reveal">
+                    <div>
+                        <span class="eyebrow">Our Expertise</span>
+                        <h2>Signature <em>services</em></h2>
+                    </div>
+                    <p>Choose a service and variant to see pricing, duration and reserve your salon appointment.</p>
+                </div>
+                <div id="services-container"></div>
+            </div>
+        </section>
+
+        <!-- HOME SERVICE — intentionally separate from salon appointment booking -->
+        <section id="home-service" class="section home-service-section">
+            <div class="container">
+                <div class="home-service-card reveal">
+                    <div class="home-service-copy">
+                        <span class="eyebrow">Beauty, wherever you are</span>
+                        <h2>Bring the <em>salon</em> to you.</h2>
+                        <p>
+                            Prefer to stay home? Home service is a dedicated experience.
+                            Select your beauty service, provide your location and preferred
+                            time, then submit the request directly to Beauty Buffet for confirmation.
+                        </p>
+                        <div class="home-service-features">
+                            <span><i class="fa-solid fa-house"></i> At-home service</span>
+                            <span><i class="fa-solid fa-clock"></i> Choose your time</span>
+                            <span><i class="fa-solid fa-circle-check"></i> Easy confirmation</span>
+                        </div>
+                        <button class="primary-btn large-btn" onclick="openHomeServiceModal()">
+                            Request Home Service <i class="fa-solid fa-arrow-right"></i>
+                        </button>
+                    </div>
+                    <div class="home-service-image">
+                        <img src="img/Micro Twists1.jpeg" alt="Beauty Buffet home service">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- PRODUCTS -->
+        <section id="products" class="section products-section">
+            <div class="container">
+                <div class="section-heading reveal">
+                    <div>
+                        <span class="eyebrow">Beauty Buffet Shop</span>
+                        <h2>Beauty <em>essentials.</em></h2>
+                    </div>
+                    <p>Browse available products, choose your size and quantity, then send your order directly to Beauty Buffet for processing.</p>
+                </div>
+                <div id="products-container" class="products-grid"></div>
+            </div>
+        </section>
+
+        <!-- STYLISTS -->
+        <section id="stylists" class="section stylists-section">
+            <div class="container">
+                <div class="section-heading centered reveal">
+                    <span class="eyebrow">Meet Our Team</span>
+                    <h2>Expert <em>stylists</em></h2>
+                    <p>Creative hands, careful details and a genuine passion for beauty.</p>
+                </div>
+                <div class="horizontal-scroll">
+                    <div id="stylists-container" class="stylists-row"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- GALLERY -->
+        <section id="gallery" class="section gallery-section">
+            <div class="container">
+                <div class="section-heading centered reveal">
+                    <span class="eyebrow">Our Work</span>
+                    <h2>Beauty in <em>every detail.</em></h2>
+                </div>
+                <div class="horizontal-scroll">
+                    <div id="gallery-container" class="gallery-row"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- CTA -->
+        <section class="final-cta">
+            <div class="container final-cta-inner">
+                <span class="eyebrow">Ready for your next look?</span>
+                <h2>Let's make you <em>unforgettable.</em></h2>
+                <div class="final-cta-actions">
+                    <button class="primary-btn large-btn" onclick="openBookingModal()">Book at the Salon</button>
+                    <button class="outline-gold-btn large-btn" onclick="openHomeServiceModal()">Request Home Service</button>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- SALON APPOINTMENT MODAL -->
+    <div id="booking-modal" class="modal hidden" aria-hidden="true">
+        <div class="modal-backdrop" onclick="closeModal('booking-modal')"></div>
+        <div class="modal-panel">
+            <div class="modal-header">
+                <div>
+                    <span class="eyebrow">Salon appointment</span>
+                    <h3>Book at the <em>salon.</em></h3>
+                    <p>Choose your service, preferred date and time to reserve your salon appointment.</p>
+                </div>
+                <button class="modal-close" onclick="closeModal('booking-modal')" aria-label="Close">&times;</button>
+            </div>
+            <form id="booking-form" onsubmit="submitBooking(event)" class="modal-form"></form>
+        </div>
+    </div>
+
+    <!-- HOME SERVICE MODAL -->
+    <div id="home-service-modal" class="modal hidden" aria-hidden="true">
+        <div class="modal-backdrop" onclick="closeModal('home-service-modal')"></div>
+        <div class="modal-panel">
+            <div class="modal-header">
+                <div>
+                    <span class="eyebrow">Private beauty service</span>
+                    <h3>Home <em>service.</em></h3>
+                    <p>A dedicated home-service request — separate from salon appointments.</p>
+                </div>
+                <button class="modal-close" onclick="closeModal('home-service-modal')" aria-label="Close">&times;</button>
+            </div>
+            <form id="home-service-form" onsubmit="submitHomeService(event)" class="modal-form"></form>
+        </div>
+    </div>
+
+    <!-- PRODUCT ORDER MODAL -->
+    <div id="product-modal" class="modal hidden" aria-hidden="true">
+        <div class="modal-backdrop" onclick="closeModal('product-modal')"></div>
+        <div class="modal-panel product-order-panel">
+            <div class="modal-header">
+                <div>
+                    <span class="eyebrow">Beauty Buffet Shop</span>
+                    <h3>Order <em>product.</em></h3>
+                    <p>Enter your delivery details and submit your order.</p>
+                </div>
+                <button class="modal-close" onclick="closeModal('product-modal')" aria-label="Close">&times;</button>
+            </div>
+            <form id="product-form" onsubmit="submitProductOrder(event)" class="modal-form"></form>
+        </div>
+    </div>
+
+    <footer class="site-footer">
+        <div class="container footer-inner">
+            <div>
+                <a href="#home" class="brand footer-brand">
+                    <img src="img/logo.jpg" alt="Beauty Buffet Salon GH">
+                    <span>Beauty Buffet</span>
+                </a>
+                <p>Premium beauty services and essentials in Accra, Ghana.</p>
+            </div>
+            <div class="footer-links">
+                <a href="#services">Services</a>
+                <a href="#home-service">Home Service</a>
+                <a href="#products">Shop</a>
+                <a href="#gallery">Gallery</a>
+            </div>
+        </div>
+        <div class="container footer-bottom">
+            <span>© 2026 Beauty Buffet Salon GH. All Rights Reserved.</span>
+            <span>Agbogba, Accra, Ghana</span>
+        </div>
+    </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script src="script.js"></script>
+</body>
+</html>
