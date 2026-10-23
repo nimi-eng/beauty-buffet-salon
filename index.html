@@ -263,6 +263,30 @@
         </div>
     </div>
 
+    <!-- SERVICE IMAGE VIEWER (click a service slider image to open) -->
+    <div id="image-viewer" class="image-viewer hidden" aria-hidden="true">
+        <div class="image-viewer-backdrop" onclick="closeImageViewer()"></div>
+
+        <div class="image-viewer-toolbar">
+            <button type="button" class="viewer-btn" onclick="zoomViewer(-0.5)" aria-label="Zoom out">
+                <i class="fa-solid fa-magnifying-glass-minus"></i>
+            </button>
+            <button type="button" class="viewer-btn" onclick="zoomViewer(0.5)" aria-label="Zoom in">
+                <i class="fa-solid fa-magnifying-glass-plus"></i>
+            </button>
+            <button type="button" class="viewer-btn" onclick="resetViewer()" aria-label="Reset zoom">
+                <i class="fa-solid fa-arrows-rotate"></i>
+            </button>
+            <button type="button" class="viewer-btn viewer-close" onclick="closeImageViewer()" aria-label="Close viewer">
+                &times;
+            </button>
+        </div>
+
+        <div id="image-viewer-stage" class="image-viewer-stage">
+            <img id="image-viewer-img" src="" alt="" draggable="false">
+        </div>
+    </div>
+
     <footer class="site-footer">
         <div class="container footer-inner">
             <div>

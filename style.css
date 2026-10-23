@@ -445,10 +445,12 @@ h2 em, h3 em, h1 em {
 }
 
 .service-slider {
-    height: 270px;
+    aspect-ratio: 1 / 1;
+    height: auto;
     position: relative;
     overflow: hidden;
     background: #eee;
+    cursor: zoom-in;
 }
 
 .slide-image {
@@ -459,17 +461,21 @@ h2 em, h3 em, h1 em {
     object-fit: cover;
     opacity: 0;
     transition: opacity 1s ease, transform 5s ease;
+    pointer-events: none;
 }
 
 .slide-image.active {
     opacity: 1;
     transform: scale(1.04);
+    pointer-events: auto;
+    cursor: zoom-in;
 }
 
 .service-image-overlay {
     position: absolute;
     inset: 0;
     background: linear-gradient(0deg, rgba(26,13,20,.5), transparent 55%);
+    pointer-events: none;
 }
 
 .service-body { padding: 25px; }
@@ -1063,6 +1069,88 @@ textarea.form-control {
     filter: brightness(.96);
 }
 
+/* SERVICE IMAGE VIEWER */
+.image-viewer {
+    position: fixed;
+    inset: 0;
+    z-index: 400;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.image-viewer.hidden { display: none; }
+
+.image-viewer-backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(15, 6, 12, .94);
+    backdrop-filter: blur(6px);
+}
+
+.image-viewer-toolbar {
+    position: absolute;
+    top: 18px;
+    right: 18px;
+    z-index: 2;
+    display: flex;
+    gap: 10px;
+}
+
+.viewer-btn {
+    width: 46px;
+    height: 46px;
+    border-radius: 50%;
+    border: 1px solid rgba(255, 255, 255, .25);
+    background: rgba(255, 255, 255, .08);
+    color: white;
+    font-size: 1rem;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: .25s ease;
+}
+
+.viewer-btn:hover {
+    background: rgba(255, 255, 255, .2);
+}
+
+.viewer-close {
+    font-size: 1.7rem;
+    line-height: 1;
+}
+
+.image-viewer-stage {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    touch-action: none;
+}
+
+#image-viewer-img {
+    max-width: 92vw;
+    max-height: 88svh;
+    width: auto;
+    height: auto;
+    cursor: grab;
+    user-select: none;
+    -webkit-user-select: none;
+    -webkit-user-drag: none;
+    will-change: transform;
+    transition: transform .15s ease-out;
+}
+
+#image-viewer-img.dragging {
+    cursor: grabbing;
+    transition: none;
+}
+
 /* FOOTER */
 .site-footer {
     background: #21131a;
@@ -1249,7 +1337,7 @@ textarea.form-control {
         grid-template-columns: 1fr;
     }
 
-    .service-slider { height: 300px; }
+    .service-slider { aspect-ratio: 1 / 1; height: auto; }
 
     .footer-inner,
     .footer-bottom {

@@ -513,6 +513,24 @@ function startServiceSliders() {
     document
         .querySelectorAll("[data-slider]")
         .forEach(slider => {
+            /*
+             * Clicking the visible slide opens the image viewer
+             * so the customer can inspect and zoom the photo.
+             */
+            slider.addEventListener("click", () => {
+                const activeImage =
+                    slider.querySelector(".slide-image.active");
+
+                if (!activeImage) {
+                    return;
+                }
+
+                openImageViewer(
+                    activeImage.src,
+                    activeImage.alt
+                );
+            });
+
             const images =
                 slider.querySelectorAll(".slide-image");
 
@@ -532,6 +550,299 @@ function startServiceSliders() {
             }, 6500);
         });
 }
+
+/* =========================================================
+   SERVICE IMAGE VIEWER (VIEW + ZOOM)
+   ========================================================= */
+
+const VIEWER_MIN_SCALE = 1;
+const VIEWER_MAX_SCALE = 5;
+
+let viewerScale = 1;
+let viewerX = 0;
+let viewerY = 0;
+let viewerDragging = false;
+let viewerStartX = 0;
+let viewerStartY = 0;
+let viewerOriginX = 0;
+let viewerOriginY = 0;
+let viewerPinchDistance = 0;
+
+function applyViewerTransform(animate) {
+    const img =
+        document.getElementById("image-viewer-img");
+
+    if (!img) {
+        return;
+    }
+
+    img.style.transition = animate ? "" : "none";
+
+    img.style.transform =
+        `translate(${viewerX}px, ${viewerY}px) scale(${viewerScale})`;
+}
+
+function openImageViewer(src, alt) {
+    const viewer =
+        document.getElementById("image-viewer");
+
+    const img =
+        document.getElementById("image-viewer-img");
+
+    if (!viewer || !img) {
+        return;
+    }
+
+    img.src = src;
+    img.alt = alt || "";
+    img.classList.remove("dragging");
+
+    viewerScale = 1;
+    viewerX = 0;
+    viewerY = 0;
+
+    applyViewerTransform(true);
+
+    viewer.classList.remove("hidden");
+    viewer.setAttribute("aria-hidden", "false");
+
+    document.body.style.overflow = "hidden";
+}
+
+function closeImageViewer() {
+    const viewer =
+        document.getElementById("image-viewer");
+
+    if (!viewer) {
+        return;
+    }
+
+    viewer.classList.add("hidden");
+    viewer.setAttribute("aria-hidden", "true");
+
+    viewerDragging = false;
+    viewerPinchDistance = 0;
+
+    if (!document.querySelector(".modal:not(.hidden)")) {
+        document.body.style.overflow = "";
+    }
+}
+
+function zoomViewer(delta) {
+    viewerScale = Math.min(
+        VIEWER_MAX_SCALE,
+        Math.max(
+            VIEWER_MIN_SCALE,
+            viewerScale + delta
+        )
+    );
+
+    if (viewerScale === VIEWER_MIN_SCALE) {
+        viewerX = 0;
+        viewerY = 0;
+    }
+
+    applyViewerTransform(true);
+}
+
+function resetViewer() {
+    viewerScale = 1;
+    viewerX = 0;
+    viewerY = 0;
+
+    applyViewerTransform(true);
+}
+
+(function initImageViewerInteractions() {
+    const stage =
+        document.getElementById("image-viewer-stage");
+
+    const img =
+        document.getElementById("image-viewer-img");
+
+    if (!stage || !img) {
+        return;
+    }
+
+    img.draggable = false;
+
+    /* Clicking the empty space around the photo closes the viewer */
+    stage.addEventListener("click", event => {
+        if (event.target === stage) {
+            closeImageViewer();
+        }
+    });
+
+    /* Mouse drag to pan when zoomed in */
+    img.addEventListener("mousedown", event => {
+        if (viewerScale <= 1) {
+            return;
+        }
+
+        event.preventDefault();
+
+        viewerDragging = true;
+        viewerStartX = event.clientX;
+        viewerStartY = event.clientY;
+        viewerOriginX = viewerX;
+        viewerOriginY = viewerY;
+
+        img.classList.add("dragging");
+    });
+
+    window.addEventListener("mousemove", event => {
+        if (!viewerDragging) {
+            return;
+        }
+
+        viewerX =
+            viewerOriginX +
+            (event.clientX - viewerStartX);
+
+        viewerY =
+            viewerOriginY +
+            (event.clientY - viewerStartY);
+
+        applyViewerTransform(false);
+    });
+
+    window.addEventListener("mouseup", () => {
+        if (!viewerDragging) {
+            return;
+        }
+
+        viewerDragging = false;
+
+        img.classList.remove("dragging");
+    });
+
+    /* Double click toggles zoom */
+    img.addEventListener("dblclick", () => {
+        if (viewerScale > 1) {
+            resetViewer();
+        } else {
+            viewerScale = 2.5;
+
+            applyViewerTransform(true);
+        }
+    });
+
+    /* Mouse wheel zoom */
+    stage.addEventListener(
+        "wheel",
+        event => {
+            event.preventDefault();
+
+            zoomViewer(
+                event.deltaY < 0 ? 0.25 : -0.25
+            );
+        },
+        { passive: false }
+    );
+
+    /* Touch: one finger pans, two fingers pinch to zoom */
+    stage.addEventListener(
+        "touchstart",
+        event => {
+            if (
+                event.touches.length === 1 &&
+                viewerScale > 1
+            ) {
+                viewerDragging = true;
+                viewerStartX =
+                    event.touches[0].clientX;
+                viewerStartY =
+                    event.touches[0].clientY;
+                viewerOriginX = viewerX;
+                viewerOriginY = viewerY;
+            } else if (event.touches.length === 2) {
+                viewerDragging = false;
+
+                viewerPinchDistance = Math.hypot(
+                    event.touches[0].clientX -
+                        event.touches[1].clientX,
+                    event.touches[0].clientY -
+                        event.touches[1].clientY
+                );
+            }
+        },
+        { passive: true }
+    );
+
+    stage.addEventListener(
+        "touchmove",
+        event => {
+            if (event.touches.length === 2) {
+                event.preventDefault();
+
+                const distance = Math.hypot(
+                    event.touches[0].clientX -
+                        event.touches[1].clientX,
+                    event.touches[0].clientY -
+                        event.touches[1].clientY
+                );
+
+                if (viewerPinchDistance) {
+                    viewerScale = Math.min(
+                        VIEWER_MAX_SCALE,
+                        Math.max(
+                            VIEWER_MIN_SCALE,
+                            viewerScale *
+                                (distance /
+                                    viewerPinchDistance)
+                        )
+                    );
+
+                    if (viewerScale === VIEWER_MIN_SCALE) {
+                        viewerX = 0;
+                        viewerY = 0;
+                    }
+
+                    applyViewerTransform(false);
+                }
+
+                viewerPinchDistance = distance;
+            } else if (
+                event.touches.length === 1 &&
+                viewerDragging
+            ) {
+                event.preventDefault();
+
+                viewerX =
+                    viewerOriginX +
+                    (event.touches[0].clientX -
+                        viewerStartX);
+
+                viewerY =
+                    viewerOriginY +
+                    (event.touches[0].clientY -
+                        viewerStartY);
+
+                applyViewerTransform(false);
+            }
+        },
+        { passive: false }
+    );
+
+    stage.addEventListener("touchend", () => {
+        viewerDragging = false;
+        viewerPinchDistance = 0;
+    });
+})();
+
+/* Close the viewer with the Escape key */
+document.addEventListener("keydown", event => {
+    if (event.key !== "Escape") {
+        return;
+    }
+
+    const viewer =
+        document.getElementById("image-viewer");
+
+    if (viewer && !viewer.classList.contains("hidden")) {
+        closeImageViewer();
+    }
+});
 
 /* =========================================================
    IMPORTANT:
